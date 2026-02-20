@@ -1,0 +1,62 @@
+:root {
+  --hero-bg: #4B5A59;      /* main dark green-grey */
+  --light-bg: #F4F4F2;     /* page background */
+  --card-bg: #E9E9E7;      /* light grey panels */
+  --text-dark: #1F2A2A;
+  --text-light: #F2F2F2;
+  --accent: #C6D18C;       /* soft olive */
+}
+
+/* Page */
+body {
+  background: var(--light-bg);
+  color: var(--text-dark);
+  font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Full-screen sections */
+.full-screen {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: var(--hero-bg);
+  color: var(--text-light);
+}
+
+/* Overlay */
+.overlay-text {
+  padding: 20px 40px;
+}
+
+/* Scroll blocks */
+.scroll-block {
+  padding: 120px 20%;
+  font-size: 1.2rem;
+  line-height: 1.7;
+  background: var(--card-bg);
+  margin-bottom: 40px;
+  border-radius: 12px;
+}
+
+/* Headings */
+h1 {
+  font-weight: 700;
+  font-size: 3rem;
+}
+
+h2 {
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+/* Links / emphasis */
+a {
+  color: var(--accent);
+}
+
+strong {
+  color: var(--hero-bg);
+}
