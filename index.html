@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Health Workforce Education &amp; Training: Scrollytelling Summary</title>
+<title>index</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -46,40 +46,57 @@ ul.task-list li input[type="checkbox"] {
 
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Health Workforce Education &amp; Training: Scrollytelling Summary</h1>
+
+
+
+<p><img src="images/logo.png" class="floating-logo"></p>
+<section class="cover-hero snap cover-snap">
+  <div class="cover-panel">
+    <h1>
+      Position Statement on Health Workforce Education and Training to Support
+      People with Intellectual Disability
+    </h1>
+    <p class="cover-date">February 2026</p>
+
+    <!-- logo later -->
+    <!-- <img src="images/logo.png" class="cover-logo"> -->
+  </div>
+</section>
+<div class="story-rail" aria-label="Story progress">
+<p><svg class="story-path" viewbox="0 0 120 600" preserveaspectratio="none"> <!-- curve path --> <path d="M80,20 C20,120 110,220 60,320 C10,420 110,520 70,580" class="path-line"></path> </svg></p>
+<div class="rail-dot" data-target="pos" style="top: 15%;">
+Position
 </div>
-
-
-
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<section class="full-screen">
-  <div class="overlay-text">
-    <h1>Health Workforce Education &amp; Training</h1>
-    <p>Supporting People with Intellectual Disability</p>
+<div class="rail-dot" data-target="prob" style="top: 30%;">
+Problem
+</div>
+<div class="rail-dot" data-target="sol" style="top: 45%;">
+Solution
+</div>
+<div class="rail-dot" data-target="rec" style="top: 60%;">
+Key recs
+</div>
+<div class="rail-dot" data-target="how" style="top: 75%;">
+How
+</div>
+<div class="rail-dot" data-target="glos" style="top: 90%;">
+Glossary
+</div>
+</div>
+<section id="pos" class="scroll-block snap position-section">
+  <div class="hover-card">
+    <h2 class="anchored">Our Position</h2>
+    <p>
+      Every health professional must learn how to provide quality health care to people with intellectual disability because everyone has the right to
+      <span class="kw" tabindex="0">safe</span>,
+      <span class="kw" tabindex="0">respectful</span>,
+      <span class="kw" tabindex="0">effective</span> and
+      <span class="kw" tabindex="0">inclusive</span>
+      health care.
+    </p>
   </div>
 </section>
-<section class="scroll-block">
-<h2 class="anchored">
-Our Position
-</h2>
-<p>
-Every health professional must learn how to provide quality health care to people with intellectual disability because everyone has the right to safe, respectful, effective and inclusive health care.
-</p>
-</section>
-<section class="scroll-block">
+<section id="prob" class="scroll-block snap">
 <h2 class="anchored">
 The Problem
 </h2>
@@ -93,7 +110,7 @@ As the document notes, <em>“University courses teach very little, if anything,
 This gap leaves much of the workforce underprepared to deliver accessible and equitable care.
 </p>
 </section>
-<section class="scroll-block">
+<section id="sol" class="scroll-block snap">
 <h2 class="anchored">
 The Solution
 </h2>
@@ -107,7 +124,7 @@ Training must be grounded in human rights, reflect lived experience, encourage s
 As Lucy, a project worker with lived experience, says: <em>“All health workers need to respect people with intellectual disability and treat them with fairness…”</em>
 </p>
 </section>
-<section class="scroll-block">
+<section id="rec" class="scroll-block snap">
 <h2 class="anchored">
 Key Recommendations
 </h2>
@@ -138,7 +155,7 @@ Provide health professionals with the time, resources and support needed to appl
 </li>
 </ul>
 </section>
-<section class="scroll-block">
+<section id="how" class="scroll-block snap">
 <h2 class="anchored">
 How This Statement Was Created
 </h2>
@@ -146,7 +163,7 @@ How This Statement Was Created
 The Position Statement draws on best evidence and insights from people with intellectual disability, families, carers, health professionals, educators, researchers and advocates.
 </p>
 </section>
-<section class="scroll-block">
+<section id="glos" class="scroll-block snap">
 <h2 class="anchored">
 Glossary of Key Terms
 </h2>
@@ -171,7 +188,53 @@ This section summarises important terms from the document:
 </li>
 </ul>
 </section>
-<section class="full-screen">
+<script>
+(function () {
+  const sections = document.querySelectorAll(".snap:not(.cover-hero)");
+  if (!sections.length) return;
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      // intersectionRatio is 0..1
+      const r = e.intersectionRatio;
+
+      e.target.style.opacity = r;
+      e.target.style.transform = `translateY(${20 - 20 * r}px)`;
+    });
+  }, {
+    threshold: Array.from({length: 101}, (_, i) => i / 100)
+  });
+
+  sections.forEach(s => obs.observe(s));
+})();
+</script>
+<script>
+(function(){
+  const dots = document.querySelectorAll(".rail-dot");
+  const sections = ["pos","prob","sol","rec","how","glos"]
+    .map(id => document.getElementById(id))
+    .filter(Boolean);
+
+  if(!sections.length || !dots.length) return;
+
+  const dotMap = new Map();
+  dots.forEach(d => dotMap.set(d.dataset.target, d));
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        dots.forEach(d => d.classList.remove("active"));
+        const id = e.target.id;
+        const dot = dotMap.get(id);
+        if(dot) dot.classList.add("active");
+      }
+    });
+  }, { threshold: 0.55 });
+
+  sections.forEach(s => obs.observe(s));
+})();
+</script>
+<section class="full-screen snap">
   <div class="overlay-text">
     <h2 class="anchored">Toward a More Inclusive Health System</h2>
     <p>Education and training turn good intentions into safer care.</p>
