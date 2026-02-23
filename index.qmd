@@ -59,23 +59,25 @@ execute:
 ```
 
 
-
 <section id= "prob" class="scroll-block snap">
+  <div class="hover-card">
   <h2>The Problem</h2>
   <p>
     People with intellectual disability experience some of the poorest health outcomes in Australia. Many of these outcomes are preventable with better access to inclusive, high-quality care.
   </p>
 
   <p>
-    As the document notes, <em>“University courses teach very little, if anything, about intellectual disability…”</em> and most health professionals are not required to complete training in this area.
+    As the document notes, <em class="scroll-highlight">“University courses teach very little, if anything, about intellectual disability…”</em> and most health professionals are not required to complete training in this area.
   </p>
 
   <p>
     This gap leaves much of the workforce underprepared to deliver accessible and equitable care.
   </p>
+  </div>
 </section>
 
 <section id= "sol" class="scroll-block snap">
+  <div class="hover-card">
   <h2>The Solution</h2>
   <p>
     Better education and training is one of the top requests made by people with intellectual disability. The Position Statement calls for a coordinated national approach to upskill today’s and tomorrow’s health workforce.
@@ -89,30 +91,56 @@ execute:
     As Lucy, a project worker with lived experience, says:
     <em>“All health workers need to respect people with intellectual disability and treat them with fairness…”</em>
   </p>
+  </div>
 </section>
 
-<section id= "rec" class="scroll-block snap">
-  <h2>Key Recommendations</h2>
-  <ul>
-    <li>Make intellectual disability education compulsory in all tertiary health courses.</li>
-    <li>Increase opportunities for clinical and non-clinical placements involving people with intellectual disability.</li>
-    <li>Actively involve people with intellectual disability and their support networks in designing and delivering training.</li>
-    <li>Require intellectual disability training for all health professionals in public hospitals and emergency services.</li>
-    <li>Ensure peak bodies and specialist colleges promote CPD opportunities.</li>
-    <li>Embed intellectual disability content in specialty training curricula.</li>
-    <li>Expand high-quality training and advanced pathways for those who wish to specialise.</li>
-    <li>Provide health professionals with the time, resources and support needed to apply their training.</li>
-  </ul>
+```{=html}
+<section id="rec" class="scroll-block snap rec-section">
+  <div class="rec-wrap">
+    <!-- LEFT: sticky board -->
+    <div class="rec-board" aria-label="Recommendations board">
+      <h2>Key Recommendations</h2>
+
+      <div class="board-surface">
+        <ul class="stickers" id="stickers">
+          <li class="sticker">Make intellectual disability education compulsory in all tertiary health courses.</li>
+          <li class="sticker">Increase opportunities for clinical and non-clinical placements involving people with intellectual disability.</li>
+          <li class="sticker">Actively involve people with intellectual disability and their support networks in designing and delivering training.</li>
+          <li class="sticker">Require intellectual disability training for all health professionals in public hospitals and emergency services.</li>
+          <li class="sticker">Ensure peak bodies and specialist colleges promote CPD opportunities.</li>
+          <li class="sticker">Embed intellectual disability content in specialty training curricula.</li>
+          <li class="sticker">Expand high-quality training and advanced pathways for those who wish to specialise.</li>
+          <li class="sticker">Provide health professionals with the time, resources and support needed to apply their training.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- RIGHT: invisible scroll “track” that triggers each sticker -->
+    <div class="rec-track" aria-hidden="true">
+      <div class="rec-step"></div>
+      <div class="rec-step"></div>
+      <div class="rec-step"></div>
+      <div class="rec-step"></div>
+      <div class="rec-step"></div>
+      <div class="rec-step"></div>
+      <div class="rec-step"></div>
+      <div class="rec-step"></div>
+    </div>
+  </div>
 </section>
+```
 
 <section id= "how" class="scroll-block snap">
+  <div class="hover-card">
   <h2>How This Statement Was Created</h2>
   <p>
     The Position Statement draws on best evidence and insights from people with intellectual disability, families, carers, health professionals, educators, researchers and advocates.
   </p>
+  </div>
 </section>
 
 <section id= "glos" class="scroll-block snap">
+  <div class="hover-card">
   <h2>Glossary of Key Terms</h2>
   <p>This section summarises important terms from the document:</p>
   <ul>
@@ -122,6 +150,7 @@ execute:
     <li><strong>Reasonable adjustments:</strong> Changes that remove barriers for people with disability.</li>
     <li><strong>Support networks:</strong> Family, carers and others who help someone.</li>
   </ul>
+  </div>
 </section>
 
 <script>
@@ -169,6 +198,47 @@ execute:
   }, { threshold: 0.55 });
 
   sections.forEach(s => obs.observe(s));
+})();
+</script>
+
+<script>
+const highlights = document.querySelectorAll('.scroll-highlight');
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.remove('active');
+      void entry.target.offsetWidth; // force reflow
+      entry.target.classList.add('active');
+    }
+  });
+}, {
+  threshold: 0.6
+});
+
+highlights.forEach(el => observer.observe(el));
+</script>
+<script>
+(function () {
+  const section = document.querySelector("#rec");
+  if (!section) return;
+
+  const stickers = Array.from(section.querySelectorAll(".sticker"));
+  const steps = Array.from(section.querySelectorAll(".rec-step"));
+  if (!stickers.length || !steps.length) return;
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const idx = steps.indexOf(entry.target);
+      if (idx < 0) return;
+
+      if (entry.isIntersecting) {
+        stickers[idx].classList.add("is-on");  // control for sticker on/off
+      } 
+    });
+  }, { threshold: 0.6 });
+
+  steps.forEach(s => obs.observe(s));
 })();
 </script>
 ```{=html}

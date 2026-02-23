@@ -154,6 +154,25 @@ html{
   height: 100%;
 }
 
+.scroll-highlight {
+  position: relative;
+  font-style: normal;
+  background: linear-gradient(to right, #ffeaa7 0%, #ffeaa7 100%);
+  background-size: 0% 100%;
+  background-repeat: no-repeat;
+  transition: background-size 1s ease;
+}
+
+.scroll-highlight.active {
+  animation: pulseHighlight 2.5s ease-in-out infinite;
+}
+
+@keyframes pulseHighlight {
+  0% { background-color: #ffeaa7; }
+  50% { background-color: #fff4c2; }
+  100% { background-color: #ffeaa7; }
+}
+
 .path-line{
   fill: none;
   stroke: rgba(255,255,255,0.35); /* subtle line */
@@ -228,6 +247,171 @@ body {
   background: transparent;
   border-radius: 0;
 }
+
+/* ===== Recommendations: sticky board scrolly (complete) ===== */
+
+.rec-section{
+  /* enough scroll distance for 8 stickers attaching */
+  min-height: 220vh;
+}
+
+.rec-wrap{
+  width: min(1200px, 92vw);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr;
+  gap: 28px;
+  align-items: start;
+  padding: 28px 0;
+}
+
+/* sticky board stays in focus */
+.rec-board{
+  position: sticky;
+  top: 10vh;
+}
+
+.rec-board h2{
+  margin: 0 0 14px 0;
+  letter-spacing: -0.02em;
+}
+
+/* board surface */
+.board-surface{
+  border-radius: 28px;
+  padding: 18px;
+  min-height: 62vh;
+
+  background: #f4f1e8;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(6px);
+
+  /* optional: subtle inner depth */
+  box-shadow: 0 12px 26px rgba(0,0,0,0.16);
+}
+
+/* sticker grid */
+.stickers{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  align-items: stretch;
+}
+
+/* ---- Paper sticker look ---- */
+.sticker{
+  position: relative;
+  padding: 12px 14px;
+  border-radius: 8px;
+
+  font-size: 0.9rem;
+  line-height: 1.28;
+  font-weight: 600;
+  color: #1f2323;
+
+  min-height: 105px;
+
+  /* warm paper tone */
+  background:
+  linear-gradient(#f4f1e8, #f4f1e8),
+  repeating-linear-gradient(
+    0deg,
+    rgba(0,0,0,0.02) 0px,
+    rgba(0,0,0,0.02) 1px,
+    transparent 4px
+  );
+
+  border: 1px solid #e4dfd2;
+
+  box-shadow:
+    0 6px 14px rgba(0,0,0,0.18);
+
+  opacity: 0;
+  transform: translateY(18px) rotate(-1deg) scale(0.98);
+  transition: opacity 500ms ease, transform 700ms cubic-bezier(.2,.9,.2,1);
+}
+
+/* add slight imperfect angles */
+.sticker:nth-child(2n){ transform: translateY(18px) rotate(1.0deg) scale(0.98); }
+.sticker:nth-child(3n){ transform: translateY(18px) rotate(-0.7deg) scale(0.98); }
+.sticker:nth-child(5n){ transform: translateY(18px) rotate(1.6deg) scale(0.98); }
+
+/* subtle edge shading (paper depth) */
+.sticker::after{
+  content:"";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(0,0,0,0.10), rgba(0,0,0,0) 40%);
+  opacity: 0.08;
+}
+
+/* optional tape strip (feels like stuck notes) */
+.sticker::before{
+  content:"";
+  position: absolute;
+  top: -8px;
+  left: 18px;
+  width: 46px;
+  height: 18px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.32);
+  border: 1px solid rgba(0,0,0,0.06);
+  transform: rotate(-6deg);
+  box-shadow: 0 8px 14px rgba(0,0,0,0.12);
+  pointer-events: none;
+
+  /* hide tape until attached (nicer) */
+  opacity: 0;
+  transition: opacity 420ms ease;
+}
+
+/* attached state */
+.sticker.is-on{
+  opacity: 1;
+  transform: translateY(0) rotate(0deg) scale(1);
+  filter: blur(0);
+}
+
+.sticker.is-on::before{
+  opacity: 1;
+}
+
+/* ----- Scroll track trigger column ----- */
+.rec-track{
+  padding-top: 10vh; /* aligns with sticky top */
+}
+
+.rec-step{
+  height: 24vh; /* one scroll beat per sticker */
+}
+
+/* responsive: 4 -> 3 -> 2 -> 1 */
+@media (max-width: 1100px){
+  .stickers{ grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 860px){
+  .rec-wrap{ grid-template-columns: 1fr; }
+  .stickers{ grid-template-columns: repeat(2, 1fr); }
+  .rec-track{ display: none; }
+
+  /* on mobile, show all stickers (no scroll attach) */
+  .sticker{
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+  .sticker::before{ opacity: 1; }
+}
+@media (max-width: 520px){
+  .stickers{ grid-template-columns: 1fr; }
+}
+
 
 /* Headings */
 h1 {
