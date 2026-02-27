@@ -1,0 +1,23 @@
+/* Page stays white */
+body {
+  background: white;
+}
+
+/* Each scroll “card” section */
+.route-section {
+  width: 100%;
+  padding: 28px 0;           /* space between sections */
+}
+
+/* The centred coloured panel (2/3 width) */
+.route-panel {
+  width: min(66vw, 980px);   /* ~2/3 of viewport, capped */
+  margin: 0 auto;            /* center it -> white sides */
+  background-image: url("assests/cover-bg.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 18px;
+  padding: 28px 28px;
+  box-sizing: border-box;
+}

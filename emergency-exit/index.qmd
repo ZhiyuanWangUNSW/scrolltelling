@@ -1,0 +1,10 @@
+---
+format:
+  html:
+    css: styles.css
+---
+<section class="route-section">
+  <div class="route-panel">
+    <!-- content will go here later -->
+  </div>
+</section>

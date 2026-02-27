@@ -1,0 +1,32 @@
+---
+title: "TTS Test"
+format: html
+---
+
+<button onclick="readSection('sec1')">🔊 Read Section 1</button>
+<button onclick="stopReading()">⏹ Stop</button>
+
+<div id="sec1" style="margin-top:20px;">
+  <h2>Section 1</h2>
+  <p>
+    This is a simple test of text to speech inside a Quarto app.
+    If this works, the browser should read this paragraph aloud.
+  </p>
+</div>
+
+<script>
+function readSection(id) {
+  const text = document.getElementById(id).innerText;
+  const speech = new SpeechSynthesisUtterance(text);
+  speech.lang = "en-AU";   // Australian English
+  speech.rate = 0.95;      // Speed
+  speech.pitch = 1;
+
+  window.speechSynthesis.cancel(); // stop previous
+  window.speechSynthesis.speak(speech);
+}
+
+function stopReading() {
+  window.speechSynthesis.cancel();
+}
+</script>
