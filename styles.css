@@ -1,434 +1,326 @@
-:root {
-  --hero-bg: #D97866;      /* main dark green-grey */
-  --light-bg: #4A5958;     /* page background */
-  --card-bg: #E9E9E7;      /* light grey panels */
-  --text-dark: #1F2A2A;
-  --text-light: #F2F2F2;
-  --accent: #C6D18C;       /* soft olive */
+/* Base */
+*{ box-sizing:border-box; }
+body{
+  background:#fff;
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  color:#111;
 }
 
-html{
-  scroll-snap-type: y mandatory;
-}
-
-.snap{
-  height: 100vh;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 300ms linear, transform 300ms ease;
-  will-change: opacity, transform;
-}
-
-.cover-snap{
-  opacity: 1 !important;
-  transform: none !important;
-}
-
-.floating-logo {
-  position: fixed;
-  top: 30px;
-  left: 30px;
-  width: 80px;
-  z-index: 1000;
-  opacity: 0.9;
-}
-
-/* ===== COVER HERO ===== */
-
-.cover-hero {
-  height: 100vh;
-  width: min(80%, 1400px);
+/* Two-column layout */
+.layout{
+  display:flex;
+  justify-content:center;
+  gap: 24px;
+  padding: 24px 18px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding-left: 0;
-  padding-right: 0;
-  display: flex;
-  align-items: flex-end;
-
-  /* background image */
-  background-image: url("images/cover-wide.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center top; /* tweak later if needed */
 }
 
-
-/* dark green text panel */
-.cover-panel {
-  opacity:1;
-  max-width: none;
-  width: 100%;
-  background: rgba(217,120,102,0.92);
-  color: var(--text-light);
-
-  padding: 20px 8% 20px 8%;
-  border-top-left-radius: 56px;
-  border-top-right-radius: 56px;
+/* STAGE = the book area (make it wide) */
+.stage{
+  flex: 0 0 auto;
+  width: min(92vw, 1200px);     /* <-- big spread */
+  max-width: 1200px;
+  perspective: 1400px;          /* for flip depth */
 }
 
-/* typography */
-.cover-panel h1 {
-  margin: 0 0 18px 0;
-  font-size: clamp(1.8rem, 2.5vw, 2.2rem);
-  line-height: 1.25;
-  font-weight: 700;
-  max-width: none;
+/* If window is short, reduce width so spread fits vertically */
+@media (max-height: 820px){
+  .stage{
+    width: min(92vw, calc((100vh - 48px) * (4/3) * 2)); /* two pages of 3/4 */
+  }
 }
 
-
-
-
-/* Page */
-.hover-card{
-  background: var(--card-bg);
-  border-radius: 18px;
-  padding: 70px 80px;
-  transition: transform 220ms ease, box-shadow 220ms ease;
-  transform-origin: center;
+.scrolly{
+  flex: 1 1 auto;
+  width: min(520px, 36vw);
 }
 
-.hover-card:hover{
-  transform: scale(1.015);
-  box-shadow: 0 18px 40px rgba(0,0,0,0.12);
-}
+.spacer{ height: 55vh; }
 
-/* keyboard + mobile tap support */
-.hover-card:focus-within{
-  transform: scale(1.015);
-  box-shadow: 0 18px 40px rgba(0,0,0,0.12);
-}
-
-/* Respect people who prefer reduced motion */
-@media (prefers-reduced-motion: reduce){
-  .hover-card{ transition: none; }
-  .hover-card:hover,
-  .hover-card:focus-within{ transform: none; }
-}
-
-.position-section .kw{
-  position: relative;
-  padding: 0 2px;
-  transition: color 180ms ease;
-}
-
-.position-section .kw::after{
-  content:"";
-  position:absolute;
-  left:0;
-  bottom:-3px;
-  width:100%;
-  height:2px;
-  background:#D97866;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 220ms ease;
-  opacity: 0.9;
-}
-
-.position-section .kw:hover,
-.position-section .kw:focus{
-  color:#D97866;
-}
-
-.position-section .kw:hover::after,
-.position-section .kw:focus::after{
-  transform: scaleX(1);
-}
-
-.story-rail{
-  position: fixed;
-  right: 28px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 140px;
-  height: 70vh;
-  z-index: 999;
-  pointer-events: none; /* don’t block scrolling */
-}
-
-.story-path{
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.scroll-highlight {
-  position: relative;
-  font-style: normal;
-  background: linear-gradient(to right, #ffeaa7 0%, #ffeaa7 100%);
-  background-size: 0% 100%;
-  background-repeat: no-repeat;
-  transition: background-size 1s ease;
-}
-
-.scroll-highlight.active {
-  animation: pulseHighlight 2.5s ease-in-out infinite;
-}
-
-@keyframes pulseHighlight {
-  0% { background-color: #ffeaa7; }
-  50% { background-color: #fff4c2; }
-  100% { background-color: #ffeaa7; }
-}
-
-.path-line{
-  fill: none;
-  stroke: rgba(255,255,255,0.35); /* subtle line */
-  stroke-width: 3;
-}
-
-.rail-dot{
-  position: absolute;
-  right: 0;
-  transform: translateY(-50%);
-  font-size: 0.9rem;
-  color: rgba(255,255,255,0.65);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  white-space: nowrap;
-}
-
-.rail-dot::before{
-  content:"";
-  width: 12px;
-  height: 12px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.25);
-  box-shadow: 0 0 0 6px rgba(255,255,255,0.06);
-}
-
-.rail-dot.active{
-  color: #ffffff;
-}
-
-.rail-dot.active::before{
-  background: #D97866; /* your coral */
-  box-shadow: 0 0 0 6px rgba(217,120,102,0.22), 0 0 18px rgba(217,120,102,0.35);
-}
-
-/* hide on small screens (rail often annoying on mobile) */
-@media (max-width: 900px){
-  .story-rail{ display:none; }
-}
-
-
-body {
-  background: var(--light-bg);
-  color: var(--text-dark);
-  font-family: "Helvetica Neue", Arial, sans-serif;
-}
-
-/* Full-screen sections */
-.full-screen {
-  height: 100vh;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  background: var(--hero-bg);
-  color: var(--text-light);
-}
-
-/* Overlay */
-.overlay-text {
-  padding: 20px 40px;
-}
-
-.scroll-block {
-   width: 85%;
-  margin: 0 auto 40px auto;
-  padding: 120px 0;
-  font-size: 1.2rem;
-  line-height: 1.7;
+/* Scroll steps (invisible drivers) */
+.steps{ display:flex; flex-direction:column; gap: 24px; }
+.step{
+  height: 75vh;
+  border-radius: 12px;
+  border: 1px dashed #eee; /* remove later */
   background: transparent;
-  border-radius: 0;
+  opacity: 0;
 }
 
-/* ===== Recommendations: sticky board scrolly (complete) ===== */
-
-.rec-section{
-  /* enough scroll distance for 8 stickers attaching */
-  min-height: 220vh;
-}
-
-.rec-wrap{
-  width: min(1200px, 92vw);
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1.25fr 0.75fr;
-  gap: 28px;
-  align-items: start;
-  padding: 28px 0;
-}
-
-/* sticky board stays in focus */
-.rec-board{
+/* ---------- BOOK SPREAD ---------- */
+.book{
   position: sticky;
-  top: 10vh;
-}
+  top: 24px;
 
-.rec-board h2{
-  margin: 0 0 14px 0;
-  letter-spacing: -0.02em;
-}
-
-/* board surface */
-.board-surface{
-  border-radius: 28px;
-  padding: 18px;
-  min-height: 62vh;
-
-  background: #f4f1e8;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(6px);
-
-  /* optional: subtle inner depth */
-  box-shadow: 0 12px 26px rgba(0,0,0,0.16);
-}
-
-/* sticker grid */
-.stickers{
-  list-style: none;
-  padding: 0;
-  margin: 0;
-
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
+  width: 100%;
+  display: flex;
+  gap: 18px;                   /* gutter */
   align-items: stretch;
 }
 
-/* ---- Paper sticker look ---- */
-.sticker{
-  position: relative;
-  padding: 12px 14px;
-  border-radius: 8px;
+/* Each page in the spread */
+.book-page{
+  flex: 1 1 0;
+  aspect-ratio: 3 / 4;
+  background:#fff;
+  border:1px solid #e6e6e6;
+  box-shadow:0 8px 24px rgba(0,0,0,0.08);
+  border-radius:12px;
+  overflow:hidden;
 
-  font-size: 0.9rem;
-  line-height: 1.28;
-  font-weight: 600;
-  color: #1f2323;
-
-  min-height: 105px;
-
-  /* warm paper tone */
-  background:
-  linear-gradient(#f4f1e8, #f4f1e8),
-  repeating-linear-gradient(
-    0deg,
-    rgba(0,0,0,0.02) 0px,
-    rgba(0,0,0,0.02) 1px,
-    transparent 4px
-  );
-
-  border: 1px solid #e4dfd2;
-
-  box-shadow:
-    0 6px 14px rgba(0,0,0,0.18);
-
-  opacity: 0;
-  transform: translateY(18px) rotate(-1deg) scale(0.98);
-  transition: opacity 500ms ease, transform 700ms cubic-bezier(.2,.9,.2,1);
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  transition: transform 420ms ease, opacity 420ms ease;
 }
 
-/* add slight imperfect angles */
-.sticker:nth-child(2n){ transform: translateY(18px) rotate(1.0deg) scale(0.98); }
-.sticker:nth-child(3n){ transform: translateY(18px) rotate(-0.7deg) scale(0.98); }
-.sticker:nth-child(5n){ transform: translateY(18px) rotate(1.6deg) scale(0.98); }
-
-/* subtle edge shading (paper depth) */
-.sticker::after{
-  content:"";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  background: linear-gradient(135deg, rgba(0,0,0,0.10), rgba(0,0,0,0) 40%);
-  opacity: 0.08;
-}
-
-/* optional tape strip (feels like stuck notes) */
-.sticker::before{
-  content:"";
-  position: absolute;
-  top: -8px;
-  left: 18px;
-  width: 46px;
-  height: 18px;
-  border-radius: 6px;
-  background: rgba(255,255,255,0.32);
-  border: 1px solid rgba(0,0,0,0.06);
-  transform: rotate(-6deg);
-  box-shadow: 0 8px 14px rgba(0,0,0,0.12);
-  pointer-events: none;
-
-  /* hide tape until attached (nicer) */
-  opacity: 0;
-  transition: opacity 420ms ease;
-}
-
-/* attached state */
-.sticker.is-on{
-  opacity: 1;
-  transform: translateY(0) rotate(0deg) scale(1);
-  filter: blur(0);
-}
-
-.sticker.is-on::before{
-  opacity: 1;
-}
-
-/* ----- Scroll track trigger column ----- */
-.rec-track{
-  padding-top: 10vh; /* aligns with sticky top */
-}
-
-.rec-step{
-  height: 24vh; /* one scroll beat per sticker */
-}
-
-/* responsive: 4 -> 3 -> 2 -> 1 */
-@media (max-width: 1100px){
-  .stickers{ grid-template-columns: repeat(3, 1fr); }
-}
-@media (max-width: 860px){
-  .rec-wrap{ grid-template-columns: 1fr; }
-  .stickers{ grid-template-columns: repeat(2, 1fr); }
-  .rec-track{ display: none; }
-
-  /* on mobile, show all stickers (no scroll attach) */
-  .sticker{
-    opacity: 1;
-    transform: none;
-    filter: none;
+/* allow inner scroll on short screens like a PDF viewer */
+@media (max-height: 820px){
+  .book-page{
+    max-height: calc(100vh - 48px);
+    overflow: auto;
   }
-  .sticker::before{ opacity: 1; }
-}
-@media (max-width: 520px){
-  .stickers{ grid-template-columns: 1fr; }
 }
 
-
-/* Headings */
-h1 {
-  font-weight: 700;
-  font-size: 3rem;
+/* Flip helpers */
+.book-page.flip-out-forward{
+  transform: rotateY(-90deg);
+  opacity: 0.25;
+}
+.book-page.flip-out-back{
+  transform: rotateY(90deg);
+  opacity: 0.25;
 }
 
-h2 {
-  font-weight: 700;
-  margin-bottom: 15px;
+@media (prefers-reduced-motion: reduce){
+  .book-page{ transition: none; }
+  .book-page.flip-out-forward,
+  .book-page.flip-out-back{
+    transform: none;
+    opacity: 1;
+  }
 }
 
-/* Links / emphasis */
-a {
-  color: var(--accent);
+/* ---------- YOUR EXISTING PAGE STYLES ---------- */
+.page{
+  position:relative;
+  width:100%;
+  aspect-ratio: 3 / 4;
+  overflow:hidden;
 }
 
-strong {
-  color: var(--hero-bg);
+/* Cover page */
+.cover{
+  position:relative;
+  height: 100%;
+  background:#f7f7f7;
+}
+
+.cover-bg,
+.page-bg{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.cover-content,
+.page-content{
+  position:relative;
+  height:100%;
+  padding:54px 56px;
+}
+
+/* Buttons */
+.tts-topright,
+.page-tts{
+  position:absolute;
+  top:18px; right:18px;
+  display:flex;
+  gap:10px;
+  z-index:5;
+}
+
+.tts-btn{
+  border:1px solid #ddd;
+  background:rgba(255,255,255,0.92);
+  padding:10px 12px;
+  border-radius:12px;
+  cursor:pointer;
+  font-size:16px;
+  backdrop-filter: blur(6px);
+}
+.tts-btn:hover{ background:rgba(255,255,255,1); }
+
+/* Logo */
+.logo{
+  position:absolute;
+  left:16px; bottom:16px;
+  width:160px;
+  height:auto;
+  z-index:5;
+}
+
+/* Cover text */
+.cover-text{
+  position:absolute;
+  top:200px;
+  right:12%;
+  color:#F2F2F2;
+  max-width:720px;
+}
+.cover-text .title{
+  font-size:46px;
+  font-weight:600;
+  margin:0 0 32px 0;
+}
+.cover-text .sub{
+  font-size:23px;
+  line-height:1.35;
+  text-align:right;
+  margin-top:88px;
+}
+
+/* End page: left-aligned subtitle */
+.cover-text--left .sub{
+  text-align: left;
+  margin-top: 40px;   /* optional: tighter spacing */
+}
+
+/* Titles + lists */
+.page2-title{
+  font-size:40px;
+  font-weight:600;
+  margin:-20px 0 20px -20px;
+  color:#F2F2F2;
+}
+.page2-list{
+  margin:220px 0 0 40px;
+  font-size:30px;
+  line-height:1.35;
+  color:#000;
+  max-width:620px;
+}
+.page2-list li{ margin:14px 0; }
+
+.page3-title{
+  font-size:33px;
+  font-weight:600;
+  margin:-20px 0 20px -20px;
+  color:#F2F2F2;
+}
+.page3-list{
+  margin:180px 0 0 20px;
+  font-size:30px;
+  line-height:1.35;
+  color:#000;
+  max-width:620px;
+}
+.page3-list li{ margin:14px 0; }
+
+.page4-title{
+  font-size:33px;
+  font-weight:600;
+  margin:-20px 0 20px -20px;
+  color:#F2F2F2;
+}
+.page4-list{
+  margin:220px 0 0 40px;
+  font-size:30px;
+  line-height:1.35;
+  color:#000;
+  max-width:620px;
+}
+.page4-list li{ margin:14px 0; }
+
+/* Maps & photos */
+.map-slide{
+  display:block;
+  width:500px;
+  max-width:100%;
+  height:auto;
+  margin: 220px auto 0;
+}
+
+.door-caption{
+  margin: 18px auto 0;
+  width: 72%;
+  max-width: 680px;
+  font-size: 22px;
+  line-height: 1.35;
+  color: #000;
+  text-align: center;
+}
+
+/* Tooltip */
+.tooltip{
+  position:relative;
+  cursor:help;
+  border-bottom:2px dotted #666;
+}
+.tooltip-box{
+  position:absolute;
+  bottom:120%;
+  left:50%;
+  transform:translateX(-50%);
+  width:240px;
+  background:#222;
+  color:#fff;
+  padding:10px 12px;
+  border-radius:8px;
+  font-size:16px;
+  line-height:1.35;
+  text-align:left;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 0.18s ease;
+  z-index:10;
+}
+.tooltip:hover .tooltip-box{ opacity:1; }
+
+/* Image tooltip variant */
+.tooltip-image .tooltip-box{
+  width: 220px;
+  padding: 8px;
+  text-align: center;
+}
+
+.tooltip-img{
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  display: block;
+}
+
+.tooltip-caption{
+  display:block;
+  font-size:14px;
+  margin-top:6px;
+  color:#ddd;
+}
+
+/* Mobile: stack */
+@media (max-width: 900px){
+  .layout{ flex-direction:column; }
+  .stage{ width: min(96vw, 1200px); }
+  .scrolly{ width: 100%; }
+  .book{ top: 12px; }
+  .step{ height: 65vh; }
+}
+
+/* Short window spacing tweaks */
+@media (max-height: 820px){
+  .page-content{ padding: 36px 36px; }
+
+  .page2-list{ margin: 140px 0 0 26px; font-size: 26px; }
+  .page3-list{ margin: 120px 0 0 18px; font-size: 26px; }
+  .page4-list{ margin: 140px 0 0 26px; font-size: 26px; }
+
+  .map-slide{
+    margin: 110px auto 0;
+    width: min(560px, 92%);
+    max-height: 52vh;
+    object-fit: contain;
+  }
 }
